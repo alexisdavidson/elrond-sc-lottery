@@ -73,7 +73,7 @@ pub trait Lottery {
 
         let caller = self.blockchain().get_caller();
         // require!(!self.did_user_ping(&caller), "Already pinged");
-        require!(self.user_reward(address).is_empty(), "Already received reward");
+        require!(self.user_reward(&caller).is_empty(), "Already received reward");
 
         let current_block_timestamp = self.blockchain().get_block_timestamp();
         let reward_index = current_block_timestamp % (self.rew_vec().len()) as u64 + 1_u64;
