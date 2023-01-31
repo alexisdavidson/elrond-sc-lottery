@@ -38,7 +38,7 @@ pub trait Lottery {
         };
         self.accepted_payment_token_id().set(&token_id);
 
-        self.rew_vec().set(&rew_arr.len(), rew_arr);
+        self.rew_vec().set(rew_arr.len(), rew_arr);
     }
 
     // endpoints
