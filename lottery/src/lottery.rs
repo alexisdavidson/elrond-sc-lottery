@@ -40,7 +40,7 @@ pub trait Lottery {
 
         let mut count = 0u32;
         for element in std::array::IntoIter::new(rew_arr) {
-            self.rew_vec().get().push(&count)
+            self.rew_vec().get().push(&count);
             count += 1;
         }
     }
