@@ -38,7 +38,6 @@ pub trait Lottery {
         };
         self.accepted_payment_token_id().set(&token_id);
 
-        let rew_arr = [0, 0, 0, 0];
         for i in 0..rew_arr.len() {
             self.rew_vec().push(&(i as u64));
         }
