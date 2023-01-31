@@ -37,6 +37,8 @@ pub trait Lottery {
             OptionalValue::None => EgldOrEsdtTokenIdentifier::egld(),
         };
         self.accepted_payment_token_id().set(&token_id);
+
+        self.rew_vec().set(rew_arr);
     }
 
     // endpoints
@@ -144,6 +146,10 @@ pub trait Lottery {
     #[view(getUserPingTimestamp)]
     #[storage_mapper("userPingTimestamp")]
     fn user_ping_timestamp(&self, address: &ManagedAddress) -> SingleValueMapper<u64>;
+
+    #[view(getRemainingRewards)]
+    #[storage_mapper("userPingTimestamp")]
+    fn rew_vec(&self) -> VecMapper<u64>;
 
     // events
 
