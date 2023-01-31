@@ -21,7 +21,6 @@ pub trait Lottery {
         ping_amount: BigUint,
         duration_in_seconds: u64,
         opt_token_id: OptionalValue<EgldOrEsdtTokenIdentifier>,
-        rew_arr: &[u64],
     ) {
         require!(ping_amount > 0, "Ping amount cannot be set to zero");
         self.ping_amount().set(&ping_amount);
@@ -38,6 +37,7 @@ pub trait Lottery {
         };
         self.accepted_payment_token_id().set(&token_id);
 
+        let rew_arr = [0, 0, 0, 0];
         for i in 0..rew_arr.len() {
             self.rew_vec().push(&(i as u64));
         }
