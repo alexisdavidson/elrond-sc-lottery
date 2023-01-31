@@ -77,7 +77,7 @@ pub trait Lottery {
 
         let current_block_timestamp = self.blockchain().get_block_timestamp();
         let reward_index = current_block_timestamp % (self.rew_vec().len()) as u64 + 1_u64;
-        let reward = self.rew_vec(reward_index);
+        let reward = self.rew_vec().get(reward_index);
         self.user_reward(&caller).set(&reward);
 
         self.reward_event(&caller, &reward);
