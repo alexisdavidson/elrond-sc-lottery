@@ -42,7 +42,16 @@ pub trait Lottery {
         self.accepted_payment_token_id().set(&token_id);
 
         for i in 0..rew_1 {
-            self.rew_vec().push(&i);
+            self.rew_vec().push(1);
+        }
+        for i in 0..rew_2 {
+            self.rew_vec().push(2);
+        }
+        for i in 0..rew_3 {
+            self.rew_vec().push(3);
+        }
+        for i in 0..rew_4 {
+            self.rew_vec().push(4);
         }
     }
 
