@@ -188,7 +188,7 @@ pub trait Lottery {
     fn user_ping_timestamp(&self, address: &ManagedAddress) -> SingleValueMapper<u64>;
 
     #[view(getRemainingRewards)]
-    #[storage_mapper("userPingTimestamp")]
+    #[storage_mapper("remainingRewards")]
     fn rew_vec(&self) -> VecMapper<u64>;
 
     #[view(getUserReward)]
