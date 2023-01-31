@@ -84,26 +84,26 @@ pub trait Lottery {
     }
 
     /// User sends some tokens to be locked in the contract for a period of time.
-    // #[payable("*")]
-    // #[endpoint]
-    // fn ping(&self) {
-    //     let (payment_token, payment_amount) = self.call_value().egld_or_single_fungible_esdt();
-    //     require!(
-    //         payment_token == self.accepted_payment_token_id().get(),
-    //         "Invalid payment token"
-    //     );
-    //     require!(
-    //         payment_amount == self.ping_amount().get(),
-    //         "The payment must match the fixed ping amount"
-    //     );
+    #[payable("*")]
+    #[endpoint]
+    fn ping(&self) {
+        let (payment_token, payment_amount) = self.call_value().egld_or_single_fungible_esdt();
+        require!(
+            payment_token == self.accepted_payment_token_id().get(),
+            "Invalid payment token"
+        );
+        require!(
+            payment_amount == self.ping_amount().get(),
+            "The payment must match the fixed ping amount"
+        );
 
-    //     let caller = self.blockchain().get_caller();
-    //     require!(!self.did_user_ping(&caller), "Already pinged");
+        let caller = self.blockchain().get_caller();
+        require!(!self.did_user_ping(&caller), "Already pinged");
 
-    //     let current_block_timestamp = self.blockchain().get_block_timestamp();
-    //     self.user_ping_timestamp(&caller)
-    //         .set(&current_block_timestamp);
-    // }
+        let current_block_timestamp = self.blockchain().get_block_timestamp();
+        self.user_ping_timestamp(&caller)
+            .set(&current_block_timestamp);
+    }
 
     /// User can take back funds from the contract.
     /// Can only be called after expiration.
