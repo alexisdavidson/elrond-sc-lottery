@@ -38,7 +38,11 @@ pub trait Lottery {
         };
         self.accepted_payment_token_id().set(&token_id);
 
-        self.rew_vec().set(rew_arr.len(), rew_arr);
+        let mut count = 0u32;
+        for element in std::array::IntoIter::new(rew_arr) {
+            self.rew_vec().get().push(&count)
+            count += 1;
+        }
     }
 
     // endpoints
@@ -148,7 +152,7 @@ pub trait Lottery {
     fn user_ping_timestamp(&self, address: &ManagedAddress) -> SingleValueMapper<u64>;
 
     #[view(getRemainingRewards)]
-    #[vec_mapper("userPingTimestamp")]
+    #[storage_mapper("userPingTimestamp")]
     fn rew_vec(&self) -> VecMapper<u64>;
 
     // events
