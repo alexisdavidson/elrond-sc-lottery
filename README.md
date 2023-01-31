@@ -1,1 +1,1 @@
-# ping-pong-smart-contract
+# lottery-smart-contract
