@@ -23,7 +23,7 @@ pub trait Lottery {
         rew_1: u64,
         rew_2: u64,
         rew_3: u64,
-        rew_4: u64, // , 1, 5, 20, 74
+        rew_4: u64, // , 1, 5, 20, 74dfgd
         opt_token_id: OptionalValue<EgldOrEsdtTokenIdentifier>,
     ) {
         require!(ping_amount > 0, "Ping amount cannot be set to zero");
