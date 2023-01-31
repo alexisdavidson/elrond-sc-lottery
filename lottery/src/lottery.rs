@@ -21,10 +21,10 @@ pub trait Lottery {
         ping_amount: BigUint,
         duration_in_seconds: u64,
         opt_token_id: OptionalValue<EgldOrEsdtTokenIdentifier>,
-        rew_1: u64,
-        rew_2: u64,
-        rew_3: u64,
-        rew_4: u64,
+        // rew_1: u64,
+        // rew_2: u64,
+        // rew_3: u64,
+        // rew_4: u64,
     ) {
         require!(ping_amount > 0, "Ping amount cannot be set to zero");
         self.ping_amount().set(&ping_amount);
