@@ -38,7 +38,7 @@ pub trait Lottery {
         };
         self.accepted_payment_token_id().set(&token_id);
 
-        let mut count = 0u32;
+        let mut count = 0u64;
         for element in std::array::IntoIter::new(rew_arr) {
             self.rew_vec().push(&count);
             count += 1;
