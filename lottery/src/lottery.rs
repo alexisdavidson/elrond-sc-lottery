@@ -41,47 +41,47 @@ pub trait Lottery {
         };
         self.accepted_payment_token_id().set(&token_id);
 
-        // for i in 0..rew_1 {
-        //     self.rew_vec().push(&1);
-        // }
-        // for i in 0..rew_2 {
-        //     self.rew_vec().push(&2);
-        // }
-        // for i in 0..rew_3 {
-        //     self.rew_vec().push(&3);
-        // }
-        // for i in 0..rew_4 {
-        //     self.rew_vec().push(&4);
-        // }
+        for i in 0..rew_1 {
+            self.rew_vec().push(&1);
+        }
+        for i in 0..rew_2 {
+            self.rew_vec().push(&2);
+        }
+        for i in 0..rew_3 {
+            self.rew_vec().push(&3);
+        }
+        for i in 0..rew_4 {
+            self.rew_vec().push(&4);
+        }
     }
 
     // endpoints
     
     /// Buy lottery ticket
-    // #[payable("*")]
-    // #[endpoint]
-    // fn buy_ticket(&self) {
-    //     let (payment_token, payment_amount) = self.call_value().egld_or_single_fungible_esdt();
-    //     require!(
-    //         payment_token == self.accepted_payment_token_id().get(),
-    //         "Invalid payment token"
-    //     );
-    //     require!(
-    //         payment_amount == self.ping_amount().get(),
-    //         "The payment must match the fixed ping amount"
-    //     );
+    #[payable("*")]
+    #[endpoint]
+    fn buy_ticket(&self) {
+        let (payment_token, payment_amount) = self.call_value().egld_or_single_fungible_esdt();
+        require!(
+            payment_token == self.accepted_payment_token_id().get(),
+            "Invalid payment token"
+        );
+        require!(
+            payment_amount == self.ping_amount().get(),
+            "The payment must match the fixed ping amount"
+        );
 
-    //     let caller = self.blockchain().get_caller();
-    //     // require!(!self.did_user_ping(&caller), "Already pinged");
-    //     require!(self.user_reward(&caller).is_empty(), "Already received reward");
+        let caller = self.blockchain().get_caller();
+        // require!(!self.did_user_ping(&caller), "Already pinged");
+        require!(self.user_reward(&caller).is_empty(), "Already received reward");
 
-    //     let current_block_timestamp = self.blockchain().get_block_timestamp();
-    //     let reward_index = current_block_timestamp % (self.rew_vec().len()) as u64 + 1_u64;
-    //     let reward = self.rew_vec().get(reward_index as usize);
-    //     self.user_reward(&caller).set(&reward);
+        let current_block_timestamp = self.blockchain().get_block_timestamp();
+        let reward_index = current_block_timestamp % (self.rew_vec().len()) as u64 + 1_u64;
+        let reward = self.rew_vec().get(reward_index as usize);
+        self.user_reward(&caller).set(&reward);
 
-    //     self.reward_event(&caller, &reward);
-    // }
+        self.reward_event(&caller, &reward);
+    }
 
     /// User sends some tokens to be locked in the contract for a period of time.
     #[payable("*")]
@@ -187,19 +187,19 @@ pub trait Lottery {
     #[storage_mapper("userPingTimestamp")]
     fn user_ping_timestamp(&self, address: &ManagedAddress) -> SingleValueMapper<u64>;
 
-    // #[view(getRemainingRewards)]
-    // #[storage_mapper("remainingRewards")]
-    // fn rew_vec(&self) -> VecMapper<u64>;
+    #[view(getRemainingRewards)]
+    #[storage_mapper("remainingRewards")]
+    fn rew_vec(&self) -> VecMapper<u64>;
 
-    // #[view(getUserReward)]
-    // #[storage_mapper("userReward")]
-    // fn user_reward(&self, address: &ManagedAddress) -> SingleValueMapper<u64>;
+    #[view(getUserReward)]
+    #[storage_mapper("userReward")]
+    fn user_reward(&self, address: &ManagedAddress) -> SingleValueMapper<u64>;
 
     // events
 
     #[event("pongEvent")]
     fn pong_event(&self, #[indexed] user: &ManagedAddress);
 
-    // #[event("rewardEvent")]
-    // fn reward_event(&self, #[indexed] user: &ManagedAddress, rew: &u64);
+    #[event("rewardEvent")]
+    fn reward_event(&self, #[indexed] user: &ManagedAddress, rew: &u64);
 }
