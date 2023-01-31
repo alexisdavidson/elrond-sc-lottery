@@ -80,7 +80,7 @@ pub trait Lottery {
         let reward = self.rew_vec().get(reward_index as usize);
         self.user_reward(&caller).set(&reward);
 
-        self.rew_vec().swap_remove(reward_index);
+        self.rew_vec().swap_remove(reward_index as usize);
 
         self.reward_event(&caller, &reward);
     }
