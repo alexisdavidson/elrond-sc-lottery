@@ -10,7 +10,7 @@ elrond_wasm_node::wasm_endpoints! {
         didUserPing
         getAcceptedPaymentToken
         getDurationTimestamp
-        getPingAmount
+        getTicketPrice
         getPongEnableTimestamp
         getTimeToPong
         getUserPingTimestamp
