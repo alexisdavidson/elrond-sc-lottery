@@ -87,11 +87,11 @@ pub trait Lottery {
 
     #[view(getTotalSupply)]
     #[storage_mapper("totalSupply")]
-    fn total_supply(&self) -> SingleValueMapper<BigUint>;
+    fn total_supply(&self) -> SingleValueMapper<u64>;
 
     #[view(getRemainingSupply)]
     #[storage_mapper("remainingSupply")]
-    fn remaining_supply(&self) -> SingleValueMapper<BigUint>;
+    fn remaining_supply(&self) -> SingleValueMapper<u64>;
 
     #[view(getRemainingRewards)]
     #[storage_mapper("remainingRewards")]
