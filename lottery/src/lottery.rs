@@ -36,8 +36,9 @@ pub trait Lottery {
             self.rew_vec().push(&4);
         }
 
-        self.total_supply().set(&(rew_1 + rew_2 + rew_3 + rew_4));
-        self.remaining_supply().set(self.total_supply.get());
+        let totalSupply = (rew_1 + rew_2 + rew_3 + rew_4) as u64;
+        self.total_supply().set(&totalSupply);
+        self.remaining_supply().set(&totalSupply);
     }
 
     // endpoints
