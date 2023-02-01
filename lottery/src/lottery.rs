@@ -60,6 +60,7 @@ pub trait Lottery {
         self.user_reward(&caller).set(&reward);
 
         self.rew_vec().swap_remove(reward_index as usize);
+        self.remaining_supply().set(self.remaining_supply().get() - 1);
 
         self.reward_event(&caller, &reward);
     }
@@ -70,6 +71,18 @@ pub trait Lottery {
     fn set_price(&self, ticket_price: BigUint ) {
         require!(ticket_price > 0, "Ticket price cannot be set to zero");
         self.ticket_price().set(&ticket_price);
+    }
+    
+    // Claim balance
+    #[only_owner]
+    #[endpoint]
+    fn claim(&self) {
+        let caller = self.blockchain().get_caller();
+        let egld_balance = self
+            .blockchain()
+            .get_sc_balance(&EgldOrEsdtTokenIdentifier::egld(), 0);
+
+        self.send().direct_egld(&caller, &egld_balance);
     }
 
     // views
