@@ -63,7 +63,7 @@ pub trait Lottery {
         self.user_reward(&caller).set(&reward);
 
         self.rew_vec().swap_remove(reward_index as usize);
-        self.participants().push(&caller);
+        self.participants().push(&caller, &reward);
         self.remaining_supply().set(self.remaining_supply().get() - 1);
 
         self.reward_event(&caller, &reward);
@@ -116,7 +116,7 @@ pub trait Lottery {
 
     #[view(getParticipants)]
     #[storage_mapper("participants")]
-    fn participants(&self) -> VecMapper<ManagedAddress>;
+    fn participants(&self) -> VecMapper<ManagedAddress, u64>;
 
     #[view(getUserReward)]
     #[storage_mapper("userReward")]
