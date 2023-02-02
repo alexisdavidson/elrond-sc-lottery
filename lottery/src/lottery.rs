@@ -117,7 +117,7 @@ pub trait Lottery {
 
     #[view(getParticipants)]
     #[storage_mapper("participants")]
-    fn participants(&self) -> VecMapper<&ManagedAddress>;
+    fn participants(&self) -> VecMapper<ManagedAddress>;
 
     #[view(getUserReward)]
     #[storage_mapper("userReward")]
