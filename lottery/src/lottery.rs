@@ -45,7 +45,6 @@ pub trait Lottery {
     
     /// Buy lottery ticket
     #[payable("*")]
-    #[only_user]
     #[endpoint]
     fn buy_ticket(&self) {
         let (payment_token, payment_amount) = self.call_value().egld_or_single_fungible_esdt();
