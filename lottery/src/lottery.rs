@@ -45,6 +45,7 @@ pub trait Lottery {
     
     /// Buy lottery ticket
     #[payable("*")]
+    #[only_user]
     #[endpoint]
     fn buy_ticket(&self) {
         let (payment_token, payment_amount) = self.call_value().egld_or_single_fungible_esdt();
@@ -54,12 +55,16 @@ pub trait Lottery {
         let caller = self.blockchain().get_caller();
         require!(self.user_reward(&caller).is_empty(), "Already received reward");
 
+        let is_a_sc = self.blockchain().is_smart_contract(&self.blockchain().get_caller());
+        require!(!is_a_sc, "Cannot call this function from a smart contract");
+
         let current_block_timestamp = self.blockchain().get_block_timestamp();
         let reward_index = current_block_timestamp % (self.rew_vec().len()) as u64 + 1_u64;
         let reward = self.rew_vec().get(reward_index as usize);
         self.user_reward(&caller).set(&reward);
 
         self.rew_vec().swap_remove(reward_index as usize);
+        self.participants().push(&caller);
         self.remaining_supply().set(self.remaining_supply().get() - 1);
 
         self.reward_event(&caller, &reward);
@@ -109,6 +114,10 @@ pub trait Lottery {
     #[view(getRemainingRewards)]
     #[storage_mapper("remainingRewards")]
     fn rew_vec(&self) -> VecMapper<u64>;
+
+    #[view(getParticipants)]
+    #[storage_mapper("participants")]
+    fn participants(&self) -> VecMapper<&ManagedAddress>;
 
     #[view(getUserReward)]
     #[storage_mapper("userReward")]
