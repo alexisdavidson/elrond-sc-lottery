@@ -64,7 +64,7 @@ pub trait Lottery {
 
         self.rew_vec().swap_remove(reward_index as usize);
         self.participants().push(&caller);
-        self.participantsReward().push(&reward);
+        self.participants_reward().push(&reward);
         self.remaining_supply().set(self.remaining_supply().get() - 1);
 
         self.reward_event(&caller, &reward);
