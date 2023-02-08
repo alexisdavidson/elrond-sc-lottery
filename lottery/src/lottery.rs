@@ -11,7 +11,8 @@ pub trait Lottery {
         rew_1: u64,
         rew_2: u64,
         rew_3: u64,
-        rew_4: u64, // 1, 5, 20, 74
+        rew_4: u64,
+        rew_5: u64, // 3, 25, 7, 64, 1
         opt_token_id: OptionalValue<EgldOrEsdtTokenIdentifier>,
     ) {
         require!(ticket_price > 0, "Ticket price cannot be set to zero");
@@ -35,8 +36,11 @@ pub trait Lottery {
         for i in 0..rew_4 {
             self.rew_vec().push(&4);
         }
+        for i in 0..rew_5 {
+            self.rew_vec().push(&5);
+        }
 
-        let totalSupply = (rew_1 + rew_2 + rew_3 + rew_4) as u64;
+        let totalSupply = (rew_1 + rew_2 + rew_3 + rew_4 + rew_5) as u64;
         self.total_supply().set(&totalSupply);
         self.remaining_supply().set(&totalSupply);
     }

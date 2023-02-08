@@ -1,8 +1,8 @@
 {
     "configurations": {
         "default": {
-            "proxy": "https://gateway.multiversx.com",
-            "chainID": "1"
+            "proxy": "https://devnet-api.elrond.com",
+            "chainID": "D"
         }
     },
     "contract":{
@@ -10,9 +10,9 @@
             "verbose": true,
             "bytecode": "output/lottery.wasm",
             "recall-nonce": true,
-            "pem": "../../wallet/wallet-owner-main.pem",
+            "pem": "../../wallet/wallet-owner.pem",
             "gas-limit": 59999999,
-            "arguments": [30000000000000000, 1, 5, 20, 74],
+            "arguments": [50000000000000000, 3, 25, 7, 64, 1],
             "send": true,
             "outfile": "deploy-testnet.interaction.json"
         }
