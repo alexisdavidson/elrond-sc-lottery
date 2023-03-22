@@ -7,16 +7,18 @@
 elrond_wasm_node::wasm_endpoints! {
     lottery
     (
-        didUserPing
+        buy_ticket
+        claim
         getAcceptedPaymentToken
-        getDurationTimestamp
+        getAserAmountPlayed
+        getMaxPlaysPerWallet
+        getParticipants
+        getParticipantsReward
+        getRemainingRewards
+        getRemainingSupply
         getTicketPrice
-        getPongEnableTimestamp
-        getTimeToPong
-        getUserPingTimestamp
-        myCustomFunction
-        ping
-        pong
+        getTotalSupply
+        set_price
     )
 }
 

@@ -12,7 +12,7 @@
             "recall-nonce": true,
             "pem": "../../wallet/wallet-owner-main.pem",
             "gas-limit": 59999999,
-            "arguments": [50000000000000000, 3, 25, 7, 64, 1],
+            "arguments": [50000000000000000, 0, 10, 100, 50, 839, 1],
             "send": true,
             "outfile": "deploy-testnet.interaction.json"
         }

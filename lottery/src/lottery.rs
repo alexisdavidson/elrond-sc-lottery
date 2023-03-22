@@ -8,11 +8,12 @@ pub trait Lottery {
     fn init(
         &self,
         ticket_price: BigUint,
+        max_plays_per_wallet: u64,
         rew_1: u64,
         rew_2: u64,
         rew_3: u64,
         rew_4: u64,
-        rew_5: u64, // 3, 25, 7, 64, 1
+        rew_5: u64, // 10, 100, 50, 839, 1
         opt_token_id: OptionalValue<EgldOrEsdtTokenIdentifier>,
     ) {
         require!(ticket_price > 0, "Ticket price cannot be set to zero");
@@ -43,6 +44,8 @@ pub trait Lottery {
         let totalSupply = (rew_1 + rew_2 + rew_3 + rew_4 + rew_5) as u64;
         self.total_supply().set(&totalSupply);
         self.remaining_supply().set(&totalSupply);
+
+        self.max_plays_per_wallet().set(&max_plays_per_wallet);
     }
 
     // endpoints
@@ -51,12 +54,14 @@ pub trait Lottery {
     #[payable("*")]
     #[endpoint]
     fn buy_ticket(&self) {
+        let caller = self.blockchain().get_caller();
+        let user_amount_played = self.user_amount_played(&caller).get();
+        let max_plays_per_wallet = self.max_plays_per_wallet().get();
+
         let (payment_token, payment_amount) = self.call_value().egld_or_single_fungible_esdt();
         require!(payment_token == self.accepted_payment_token_id().get(), "Invalid payment token");
         require!(payment_amount == self.ticket_price().get(), "The payment must match the ticket price");
-
-        let caller = self.blockchain().get_caller();
-        require!(self.user_reward(&caller).is_empty(), "Already received reward");
+        require!(max_plays_per_wallet == 0 || user_amount_played < max_plays_per_wallet, "Wallet played maximum amount");
 
         let is_a_sc = self.blockchain().is_smart_contract(&self.blockchain().get_caller());
         require!(!is_a_sc, "Cannot call this function from a smart contract");
@@ -64,7 +69,8 @@ pub trait Lottery {
         let current_block_timestamp = self.blockchain().get_block_timestamp();
         let reward_index = current_block_timestamp % (self.rew_vec().len()) as u64 + 1_u64;
         let reward = self.rew_vec().get(reward_index as usize);
-        self.user_reward(&caller).set(&reward);
+
+        self.user_amount_played(&caller).set(&(user_amount_played + 1));
 
         self.rew_vec().swap_remove(reward_index as usize);
         self.participants().push(&caller);
@@ -111,6 +117,10 @@ pub trait Lottery {
     #[storage_mapper("totalSupply")]
     fn total_supply(&self) -> SingleValueMapper<u64>;
 
+    #[view(getMaxPlaysPerWallet)]
+    #[storage_mapper("maxPlaysPerWallet")]
+    fn max_plays_per_wallet(&self) -> SingleValueMapper<u64>;
+
     #[view(getRemainingSupply)]
     #[storage_mapper("remainingSupply")]
     fn remaining_supply(&self) -> SingleValueMapper<u64>;
@@ -127,9 +137,9 @@ pub trait Lottery {
     #[storage_mapper("participantsReward")]
     fn participants_reward(&self) -> VecMapper<u64>;
 
-    #[view(getUserReward)]
-    #[storage_mapper("userReward")]
-    fn user_reward(&self, address: &ManagedAddress) -> SingleValueMapper<u64>;
+    #[view(getAserAmountPlayed)]
+    #[storage_mapper("userAmountPlayed")]
+    fn user_amount_played(&self, address: &ManagedAddress) -> SingleValueMapper<u64>;
 
     // events
 
