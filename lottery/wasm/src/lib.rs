@@ -12,6 +12,8 @@ elrond_wasm_node::wasm_endpoints! {
         getAcceptedPaymentToken
         getAserAmountPlayed
         getMaxPlaysPerWallet
+        getNftManagerAddress
+        getNftToken
         getParticipants
         getParticipantsReward
         getRemainingRewards

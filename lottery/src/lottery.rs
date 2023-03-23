@@ -13,7 +13,9 @@ pub trait Lottery {
         rew_2: u64,
         rew_3: u64,
         rew_4: u64,
-        rew_5: u64, // 10, 100, 50, 839, 1
+        rew_5: u64, // 10, 100, 50, 839, 1,
+        nft_manager_address: ManagedAddress,
+        nft_token_id: EgldOrEsdtTokenIdentifier,
         opt_token_id: OptionalValue<EgldOrEsdtTokenIdentifier>,
     ) {
         require!(ticket_price > 0, "Ticket price cannot be set to zero");
@@ -24,6 +26,8 @@ pub trait Lottery {
             OptionalValue::None => EgldOrEsdtTokenIdentifier::egld(),
         };
         self.accepted_payment_token_id().set(&token_id);
+        self.nft_token_id().set(&nft_token_id);
+        self.nft_manager_address().set(&nft_manager_address);
 
         for i in 0..rew_1 {
             self.rew_vec().push(&1);
@@ -59,8 +63,15 @@ pub trait Lottery {
         let max_plays_per_wallet = self.max_plays_per_wallet().get();
 
         let (payment_token, payment_amount) = self.call_value().egld_or_single_fungible_esdt();
-        require!(payment_token == self.accepted_payment_token_id().get(), "Invalid payment token");
-        require!(payment_amount == self.ticket_price().get(), "The payment must match the ticket price");
+        require!(payment_token == self.accepted_payment_token_id().get() 
+            || payment_token == self.nft_token_id().get(), "Invalid payment token");
+        
+        if (payment_token == self.accepted_payment_token_id().get()) {
+            require!(payment_amount == self.ticket_price().get(), "The payment must match the ticket price");
+        } else {
+            require!(payment_amount == 1, "Only a single NFT should be burnt to play");
+            // todo: Burn nft
+        }
         require!(max_plays_per_wallet == 0 || user_amount_played < max_plays_per_wallet, "Wallet played maximum amount");
 
         let is_a_sc = self.blockchain().is_smart_contract(&self.blockchain().get_caller());
@@ -108,6 +119,14 @@ pub trait Lottery {
     #[view(getAcceptedPaymentToken)]
     #[storage_mapper("acceptedPaymentTokenId")]
     fn accepted_payment_token_id(&self) -> SingleValueMapper<EgldOrEsdtTokenIdentifier>;
+
+    #[view(getNftToken)]
+    #[storage_mapper("nftTokenId")]
+    fn nft_token_id(&self) -> SingleValueMapper<EgldOrEsdtTokenIdentifier>;
+
+    #[view(getNftManagerAddress)]
+    #[storage_mapper("nftManagerAddress")]
+    fn nft_manager_address(&self) -> SingleValueMapper<ManagedAddress>;
 
     #[view(getTicketPrice)]
     #[storage_mapper("ticketPrice")]
